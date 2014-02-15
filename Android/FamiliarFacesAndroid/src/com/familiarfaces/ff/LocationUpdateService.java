@@ -27,8 +27,8 @@ public class LocationUpdateService extends Service {
 	
 	// Time intervals
 	private static final int NEWER_LOCATION_TIME = 1000 * 60 * 10; // 10 minutes counts as much newer location
-	private static final int MIN_LOCATION_UPDATE_TIME = (int)(60 * 1000 * 0.5); // 5 minutes between updates
-	private static final int MAX_LOCATION_UPDATE_TIME = 60 * 1000 * 1; // Maximum time between updates
+	private static final int MIN_LOCATION_UPDATE_TIME = (int)(60 * 1000 * 0.1); // 5 minutes between updates
+	private static final int MAX_LOCATION_UPDATE_TIME = (int)(60 * 1000 * 0.25); // Maximum time between updates
 	
 	// Acquire a reference to the system Location Manager
 	private LocationManager locationManager;
@@ -130,14 +130,12 @@ public class LocationUpdateService extends Service {
 		params.put("posLong", lastLocation.getLongitude());
 		params.put("timestamp", System.currentTimeMillis());
 		params.put("userId", (int)(Math.random() * 10));
-		ParseCloud.callFunctionInBackground("storeLocation", params, new FunctionCallback() {
-		    @Override  
-			public void done(Object object, ParseException e) {
-		    	if (e != null) {
-	        		Log.d(LOG_TAG, "Parse exception: " + e.getMessage());
-	        	}
-		    }
-		 });
+		try {
+			ParseCloud.callFunction("storeLocation", params);
+		} catch (ParseException e) {
+			Log.d(LOG_TAG, "Parse response: " + e.getMessage());
+		}
+		
 	}
 	
 	/**

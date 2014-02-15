@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -20,6 +21,7 @@ public class ParseApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		Parse.initialize(this, "zqmvHbnxVWFrs5g1IxKSWjw0bTM8FZ8X4OexawX8", "ABasvvzqquIRp1cc01qu4eYK8o1uxua6qixLgiO3");
+		ParseFacebookUtils.initialize("598599153543493");
 		
 	}
 
