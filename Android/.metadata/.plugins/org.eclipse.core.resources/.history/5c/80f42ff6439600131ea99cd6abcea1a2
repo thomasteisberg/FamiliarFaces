@@ -63,6 +63,8 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	        transaction.hide(fragments[i]);
 	    }
 	    transaction.commit();
+	    
+	    uiHelper.onResume();
 		
 		locationServiceIntent = new Intent(this.getApplicationContext(), LocationUpdateService.class);
 
@@ -109,7 +111,7 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 	  super.onActivityResult(requestCode, resultCode, data);
-	  //ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
 	  uiHelper.onActivityResult(requestCode, resultCode, data);
 	}
 	
@@ -118,8 +120,6 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	    super.onResume();
 	    isResumed = true;
 	    uiHelper.onResume();
-	    
-	    onResumeFragments();
 	}
 
 	@Override
