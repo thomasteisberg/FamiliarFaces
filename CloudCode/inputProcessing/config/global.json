@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "FamiliarFaces": {
+            "applicationId": "zqmvHbnxVWFrs5g1IxKSWjw0bTM8FZ8X4OexawX8", 
+            "masterKey": "MCWlN46ILCfZfzccPAdgRwyYSOsKC0ksbk4ydSXt"
+        }, 
+        "_default": {
+            "link": "FamiliarFaces"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.2.16"
+    }
+}
