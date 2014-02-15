@@ -23,7 +23,7 @@
             android:src="@drawable/icon" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/descriptionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Male, Age 19\nFrom Palo Alto, CA"
@@ -37,15 +37,15 @@
         android:layout_marginTop="10dip">
 
         <ImageButton
-            android:id="@+id/imageButton1"
+            android:id="@+id/requestCallBtn"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/imageButton1"
-            android:src="@android:drawable/ic_menu_call" />
+            android:src="@android:drawable/sym_action_call" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/requestChatBtn"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -55,7 +55,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/findNewBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
