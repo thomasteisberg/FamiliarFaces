@@ -51,10 +51,41 @@ Parse.Cloud.define("storeLocation", function(request, response){
         alert("Error: "+ error.code + " " + error.message);
     }
     });
-    response.success(); 
+    /*
+    var User = Parse.Object.extend("User");
+    var user_query = new Parse.Query(User);
+    query.equalTo("userId", userId);
+    query.find({
+        success: function(results){
+            if (results.length > 0){
+                var user = results[0];
+                var locations = user.get("locations");
+                locations.push(bucketName);
+                user.set("locations",locations);
+            }
+            else{
+                var user = new User;
+                user.set("userId", userId);
+                var locations = new Array();
+                locations.push(bucketName);
+                user.set("locations",locations);
+            }
+            user.save(null,{
+                success: function(user){
+                    user.save();
+                   // response.success();
+                },
+            error: function(user, error){
+                alert("failed");
+                //response.error(error);
+            }
+            });
+        },
+            error: function(error){
+                       alert("Error: " + error.code + " " + error.message);
+                   }
+    }); */ 
 });
-
-
 
 
 Parse.Cloud.define("matchupFinder", function(request, response){  
@@ -108,7 +139,7 @@ Parse.Cloud.define("matchupFinder", function(request, response){
                             success: function(connection){
                                 console.log("saved.");
                                 connection.save();
-                                response.success();
+                              
                             },
                             error: function(connection, error){
                                 alert("failed");
@@ -117,26 +148,27 @@ Parse.Cloud.define("matchupFinder", function(request, response){
                         });    
                     }
                     else{
-                        response.success();
+                       // response.success();
                     }
         
                 }
 
                 /** END NEW CODE **/
-            response.success();
+           // response.success();
             }
-           // status.success("woo!");
+        
         },
         error: function(){
-           // status.error("fuck.");
+           response.error();
         }
-
     }); 
-response.success();
+//response.success();
 });
 
 
 Parse.Cloud.job("findAllMatchups", function(request, status){
+
+    
 
     parameters = new Object();
     parameters.userId = "erfb9xd1eoahrkhrrdb77woyf";
