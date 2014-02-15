@@ -108,7 +108,6 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Log.d(LOG_TAG, "onActivityResult");
 	  super.onActivityResult(requestCode, resultCode, data);
 	  //ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
 	  uiHelper.onActivityResult(requestCode, resultCode, data);
@@ -116,7 +115,6 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	
 	@Override
 	public void onResume() {
-		Log.d(LOG_TAG, "onResume");
 	    super.onResume();
 	    isResumed = true;
 	    uiHelper.onResume();
@@ -124,7 +122,6 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 
 	@Override
 	public void onPause() {
-		Log.d(LOG_TAG, "onPause");
 	    super.onPause();
 	    isResumed = false;
 	    uiHelper.onPause();
@@ -132,21 +129,18 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 
 	@Override
 	public void onDestroy() {
-		Log.d(LOG_TAG, "onDestroy");
 	    super.onDestroy();
 	    uiHelper.onDestroy();
 	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		Log.d(LOG_TAG, "onSaveInstanceState");
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
 	}
 	
 	@Override
 	protected void onResumeFragments() {
-		Log.d(LOG_TAG, "onResumeFragments");
 	    super.onResumeFragments();
 	    
 	    Session session = Session.getActiveSession();
@@ -163,10 +157,8 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	}
 	
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-		Log.d(LOG_TAG, "onSessionStateChange");
 	    // Only make changes if the activity is visible
-	    /*// TODO: this could have consequences
-		if (isResumed) {
+	    if (isResumed) {
 	        FragmentManager manager = getSupportFragmentManager();
 	        // Get the number of entries in the back stack
 	        int backStackSize = manager.getBackStackEntryCount();
@@ -183,7 +175,7 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	            // Show the login fragment
 	            showFragment(SPLASH, false);
 	        }
-	    }*/
+	    }
 	}
 	
 	private void showFragment(int fragmentIndex, boolean addToBackStack) {

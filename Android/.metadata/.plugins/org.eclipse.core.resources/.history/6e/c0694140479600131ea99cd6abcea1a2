@@ -165,7 +165,7 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		Log.d(LOG_TAG, "onSessionStateChange");
 	    // Only make changes if the activity is visible
-	    /*// TODO: this could have consequences
+	    /*
 		if (isResumed) {
 	        FragmentManager manager = getSupportFragmentManager();
 	        // Get the number of entries in the back stack
