@@ -125,6 +125,12 @@ public class LocationUpdateService extends Service {
 	@SuppressWarnings("unchecked")
 	protected void sendLocationUpdate(){
 		Log.d(LOG_TAG, "Sending location (" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
+//		ParseObject locationUpdate = new ParseObject("Breadcrumb");
+//		locationUpdate.put("posLat", lastLocation.getLatitude());
+//		locationUpdate.put("posLong", lastLocation.getLongitude());
+//		locationUpdate.put("timestamp", System.currentTimeMillis());
+//		locationUpdate.put("userId", (int)(Math.random() * 10));
+//		locationUpdate.saveInBackground();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("posLat", lastLocation.getLatitude());
 		params.put("posLong", lastLocation.getLongitude());
