@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/numNearbyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="80dip"
+            android:text="0" />
+        
+        <TextView
+            android:id="@+id/nearbyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nearby"
+            android:layout_marginLeft="10dip"
+            android:textSize="30dip" />
+    </LinearLayout>
+    
+    <ImageView
+                android:id="@+id/splash_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:src="@drawable/logo"
+                android:contentDescription="@string/app_name" />
+    
+    <TextView
+            android:id="@+id/nobodyNearText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@strings/no_users"
+            android:layout_marginLeft="10dip"
+            android:textSize="10dip" />
+
+</LinearLayout>

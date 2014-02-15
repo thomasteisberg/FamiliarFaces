@@ -3,4 +3,5 @@
     <string name="app_name">FamiliarFaces</string>
     <string name="app_id">598599153543493</string>
     <string name="get_started">To get started, log in using Facebook.</string>
+    <string name="no_users">"Unfortunately, there isn't anyone we've identified as familiar to you nearby. You may want to try again after you've been running the app longer."</string>
 </resources>

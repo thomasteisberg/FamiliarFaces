@@ -2,15 +2,61 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:gravity="center_horizontal"
+    android:layout_marginTop="15px">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/numNearbyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="80dip"
+            android:text="0" />
+        
+        <TextView
+            android:id="@+id/nearbyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nearby"
+            android:layout_marginLeft="10dip"
+            android:textSize="30dip" />
+    </LinearLayout>
+    
+    <ImageView
+                android:id="@+id/splash_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="14dp"
+                android:gravity="center"
+                android:src="@drawable/logo"
+                android:contentDescription="@string/app_name" />
     
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_gravity="center"
-    android:textColor="#333"
-    android:textSize="18sp"
-    android:text="Welcome, you are now logged in."  />
+            android:id="@+id/nobodyNearText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_users"
+            android:textSize="10dip" />
+
+    <Button
+        android:id="@+id/connectBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect Me to Someone" />
+
+    <CheckBox
+        android:id="@+id/enableCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:checked="true"
+        android:gravity="bottom"
+        android:text="Enable" />
 
 </LinearLayout>

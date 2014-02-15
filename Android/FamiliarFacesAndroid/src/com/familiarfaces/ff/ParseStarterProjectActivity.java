@@ -97,9 +97,11 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 		    } else if (user.isNew()) {
 		      Log.d("MyApp", "User signed up and logged in through Facebook!");
 		      parseUser = user;
+		      Log.d(LOG_TAG, "parseUser.getUsername(): " + parseUser.getUsername());
 		    } else {
 		      Log.d("MyApp", "User logged in through Facebook!");
 		      parseUser = user;
+		      Log.d(LOG_TAG, "parseUser.getUsername(): " + parseUser.getUsername());
 		    }
 		  }
 		});
@@ -112,6 +114,8 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	  super.onActivityResult(requestCode, resultCode, data);
 	  //ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
 	  uiHelper.onActivityResult(requestCode, resultCode, data);
+	  
+	  
 	}
 	
 	@Override
