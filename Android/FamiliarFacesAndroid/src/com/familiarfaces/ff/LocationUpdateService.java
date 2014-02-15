@@ -44,7 +44,7 @@ public class LocationUpdateService extends Service {
 	public void onStart(final Intent intent, final int startId) {
 		Log.d(LOG_TAG, "onStart");
 		
-		// Setup Parse
+//		// Setup Parse
  		Parse.initialize(this, "zqmvHbnxVWFrs5g1IxKSWjw0bTM8FZ8X4OexawX8", "ABasvvzqquIRp1cc01qu4eYK8o1uxua6qixLgiO3");
 
  		ParseUser.enableAutomaticUser();
@@ -129,7 +129,7 @@ public class LocationUpdateService extends Service {
 		params.put("posLat", lastLocation.getLatitude());
 		params.put("posLong", lastLocation.getLongitude());
 		params.put("timestamp", System.currentTimeMillis());
-		params.put("userId", (int)(Math.random() * 10));
+		params.put("userId", ParseUser.getCurrentUser().getUsername());
 		try {
 			ParseCloud.callFunction("storeLocation", params);
 		} catch (ParseException e) {

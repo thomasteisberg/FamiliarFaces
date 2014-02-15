@@ -1,0 +1,7 @@
+package com.familiarfaces.ff;
+
+import android.app.Fragment;
+
+public class SplashFragment extends Fragment {
+
+}

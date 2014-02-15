@@ -9,4 +9,15 @@
 <fullyQualifiedTypeName name="android.R"/>
 <fullyQualifiedTypeName name="android.R.layout"/>
 <fullyQualifiedTypeName name="android.location.LocationListener"/>
+<fullyQualifiedTypeName name="com.parse.ParseCloud"/>
+<fullyQualifiedTypeName name="com.parse.FunctionCallback"/>
+<fullyQualifiedTypeName name="android.net.ParseException"/>
+<fullyQualifiedTypeName name="java.util.Map"/>
+<fullyQualifiedTypeName name="java.lang.Long"/>
+<fullyQualifiedTypeName name="java.util.HashMap"/>
+<fullyQualifiedTypeName name="com.parse.ParseFacebookUtils"/>
+<fullyQualifiedTypeName name="com.parse.LogInCallback"/>
+<fullyQualifiedTypeName name="com.parse.ParseUser"/>
+<fullyQualifiedTypeName name="com.parse.ParseException"/>
+<fullyQualifiedTypeName name="com.parse.ParseFacebookUtils.Permissions"/>
 </qualifiedTypeNameHistroy>
