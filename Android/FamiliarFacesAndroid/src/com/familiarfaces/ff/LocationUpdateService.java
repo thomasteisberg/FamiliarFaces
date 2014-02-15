@@ -2,15 +2,6 @@ package com.familiarfaces.ff;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.lang.Long;
-
-import com.parse.FunctionCallback;
-import com.parse.Parse;
-import com.parse.ParseACL;
-import com.parse.ParseCloud;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
-import com.parse.ParseException;
 
 import android.app.Service;
 import android.content.Intent;
@@ -21,14 +12,19 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.facebook.Session;
+import com.parse.ParseCloud;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
 public class LocationUpdateService extends Service {
 	
 	private static final String LOG_TAG = "LocationUpdateService";
 	
 	// Time intervals
 	private static final int NEWER_LOCATION_TIME = 1000 * 60 * 10; // 10 minutes counts as much newer location
-	private static final int MIN_LOCATION_UPDATE_TIME = (int)(60 * 1000 * 0.5); // 5 minutes between updates
-	private static final int MAX_LOCATION_UPDATE_TIME = 60 * 1000 * 1; // Maximum time between updates
+	private static final int MIN_LOCATION_UPDATE_TIME = (int)(60 * 1000 * 0.1); // 5 minutes between updates
+	private static final int MAX_LOCATION_UPDATE_TIME = (int)(60 * 1000 * 0.25); // Maximum time between updates
 	
 	// Acquire a reference to the system Location Manager
 	private LocationManager locationManager;
@@ -39,27 +35,36 @@ public class LocationUpdateService extends Service {
 	
 	// Flag to destroy background thread
 	private boolean killThread = false;
+	
+	private LocationListener locationListener;
 
 	@Override
 	public void onStart(final Intent intent, final int startId) {
 		Log.d(LOG_TAG, "onStart");
 		
-		// Setup Parse
- 		Parse.initialize(this, "zqmvHbnxVWFrs5g1IxKSWjw0bTM8FZ8X4OexawX8", "ABasvvzqquIRp1cc01qu4eYK8o1uxua6qixLgiO3");
+//		// Setup Parse
+ 		//Parse.initialize(this, "zqmvHbnxVWFrs5g1IxKSWjw0bTM8FZ8X4OexawX8", "ABasvvzqquIRp1cc01qu4eYK8o1uxua6qixLgiO3");
 
- 		ParseUser.enableAutomaticUser();
- 		ParseACL defaultACL = new ParseACL();
- 	    
- 		// If you would like all objects to be private by default, remove this line.
- 		defaultACL.setPublicReadAccess(true);
+ 		Session session = Session.getActiveSession();
+	    if (session != null && session.isOpened()) {
+	    	Log.d(LOG_TAG, "Got a facebook session");
+	    }else{
+	    	Log.d(LOG_TAG, "Facebook still isn't working!");
+	    }
  		
- 		ParseACL.setDefaultACL(defaultACL, true);
+// 		ParseUser.enableAutomaticUser();
+// 		ParseACL defaultACL = new ParseACL();
+// 	    
+// 		// If you would like all objects to be private by default, remove this line.
+// 		defaultACL.setPublicReadAccess(true);
+// 		
+// 		ParseACL.setDefaultACL(defaultACL, true);
 		
 		// Get a location manager
 		locationManager = (LocationManager) this.getSystemService(this.getApplicationContext().LOCATION_SERVICE);
 		
 		// Create the location callbacks
-		LocationListener locationListener = new LocationListener() {
+		locationListener = new LocationListener() {
 			
 			@Override
 			public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -92,6 +97,7 @@ public class LocationUpdateService extends Service {
 		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_LOCATION_UPDATE_TIME, 0, locationListener);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_LOCATION_UPDATE_TIME, 0, locationListener);
 		
+		
 		// Create a thread to make sure we're sending enough location updates
 		Thread t = new Thread("LocationUpdateService(" + startId + ")") {
 			@Override
@@ -120,24 +126,29 @@ public class LocationUpdateService extends Service {
 	public void onDestroy(){
 		super.onDestroy();
 		killThread = true;
+		locationManager.removeUpdates(locationListener);
+		Log.d(LOG_TAG, "onDestory called for location service");
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected void sendLocationUpdate(){
-		Log.d(LOG_TAG, "Sending location (" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
+		if(ParseUser.getCurrentUser().getUsername() == null){
+			Log.d(LOG_TAG, "Not logged in. Can't upload data");
+			return;
+		}
+		if(lastLocation == null) return;
+		Log.d(LOG_TAG, "Sending location "+ParseUser.getCurrentUser().getUsername()+":(" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("posLat", lastLocation.getLatitude());
 		params.put("posLong", lastLocation.getLongitude());
 		params.put("timestamp", System.currentTimeMillis());
-		params.put("userId", (int)(Math.random() * 10));
-		ParseCloud.callFunctionInBackground("storeLocation", params, new FunctionCallback() {
-		    @Override  
-			public void done(Object object, ParseException e) {
-		    	if (e != null) {
-	        		Log.d(LOG_TAG, "Parse exception: " + e.getMessage());
-	        	}
-		    }
-		 });
+		params.put("userId", ParseUser.getCurrentUser().getUsername());
+		try {
+			ParseCloud.callFunction("storeLocation", params);
+		} catch (ParseException e) {
+			Log.d(LOG_TAG, "Parse response: " + e.getMessage());
+		}
+		
 	}
 	
 	/**

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FamiliarFaces</string>
+    <string name="app_id">598599153543493</string>
+    <string name="get_started">To get started, log in using Facebook.</string>
+</resources>

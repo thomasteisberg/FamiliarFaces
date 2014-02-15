@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.familiarfaces.ff"
+<manifest package="com.familiarfaces.ff"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0" xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="15"/>
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="15"/>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +11,7 @@
 
     <application
         android:name="ParseApplication"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
             android:name="com.familiarfaces.ff.ParseStarterProjectActivity"
@@ -24,6 +23,8 @@
             </intent-filter>
         </activity>
         <service android:name=".LocationUpdateService" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
+        <activity android:name="com.facebook.LoginActivity" android:label="@string/app_name"></activity>
     </application>
 
 </manifest>
