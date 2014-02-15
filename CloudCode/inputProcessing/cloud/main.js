@@ -52,3 +52,8 @@ Parse.Cloud.define("storeLocation", function(request, response){
     });
  
 });
+
+Parse.Cloud.define("findNumMatches", function(request, response){
+    var username = request.params.username;
+    
+});
