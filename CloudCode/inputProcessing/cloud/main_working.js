@@ -167,12 +167,7 @@ Parse.Cloud.define("matchupFinder", function(request, response){
 
 Parse.Cloud.job("findAllMatchups", function(request, status){
 
-    var Bucket = Parse.Object.extend("Bucket");
-    var query = new Parse.Query(Bucket);
-    query.each(function(result){
-        console.log("doing this shit");
-        console.log(result);
-    });  
+    
 
     parameters = new Object();
     parameters.userId = "erfb9xd1eoahrkhrrdb77woyf";
@@ -181,9 +176,4 @@ Parse.Cloud.job("findAllMatchups", function(request, status){
     
     Parse.Cloud.run("matchupFinder",parameters, {success: function() {status.success("success!")}, error: function(error){ status.error("sad");}});
         
-});
-
-Parse.Cloud.define("findNumMatches", function(request, response){
-    var username = request.params.username;
-    response.success(Math.floor(Math.random() * 5)); // todo: Just temporary of couse
 });
