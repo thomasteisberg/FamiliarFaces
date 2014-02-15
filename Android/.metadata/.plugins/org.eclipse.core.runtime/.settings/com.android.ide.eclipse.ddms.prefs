@@ -8,3 +8,4 @@ logcat.view.colsize.TID=70
 logcat.view.colsize.Tag=133
 logcat.view.colsize.Text=680
 logcat.view.colsize.Time=198
+logcat.view.filters.list=name\: 'ff', tag\: '', text\: '', pid\: '', app\: 'com.familiarfaces.ff', level\: 'verbose', name\: 'error', tag\: '', text\: '', pid\: '', app\: '', level\: 'error', 

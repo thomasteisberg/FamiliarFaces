@@ -55,5 +55,5 @@ Parse.Cloud.define("storeLocation", function(request, response){
 
 Parse.Cloud.define("findNumMatches", function(request, response){
     var username = request.params.username;
-    
+    response.success(Math.floor(Math.random() * 5)); // TODO: Just temporary of couse
 });

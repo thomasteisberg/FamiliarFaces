@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,6 +31,7 @@ public class SelectionFragment extends Fragment {
 	Button connectBtn;
 	
 	Intent locationServiceIntent;
+	Intent inviteIntent;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -47,6 +49,7 @@ public class SelectionFragment extends Fragment {
 		connectBtn = (Button) view.findViewById(R.id.connectBtn);
 	    
 	    locationServiceIntent = new Intent(getActivity(), LocationUpdateService.class);
+	    inviteIntent = new Intent(getActivity(), InviteActivity.class);
 	    
 	    getActivity().startService(locationServiceIntent); // Start location by default
 	    
@@ -66,6 +69,14 @@ public class SelectionFragment extends Fragment {
 			}
 		});
 	    
+	    connectBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				startActivity(inviteIntent);
+			}
+		});
+	    
 	    return view;
 	}
 	
@@ -82,7 +93,7 @@ public class SelectionFragment extends Fragment {
 			public void done(Integer numNearby, ParseException e) {
 				if(numNearby == null) numNearby = 0;
 				if(e != null) Log.d(LOG_TAG, "Parse response [findNumMatches]: " + e.getMessage());
-				if(numNearby > 0){
+				if(numNearby == 0){
 					connectBtn.setVisibility(View.VISIBLE);
 					nobodyNearText.setVisibility(View.GONE);
 				}else{
