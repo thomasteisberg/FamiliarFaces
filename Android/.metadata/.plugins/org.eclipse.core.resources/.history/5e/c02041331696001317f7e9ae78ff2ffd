@@ -45,11 +45,5 @@ public class LocationUpdateService extends Service {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	@Override
-	public void onDestroy(){
-		super.onDestroy();
-		killThread = true;
-	}
 
 }
