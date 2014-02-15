@@ -1,17 +1,26 @@
 package com.familiarfaces.ff;
 
+import android.app.Application;
+import android.content.Intent;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-import android.app.Application;
-
 public class ParseApplication extends Application {
+	
+	private static String LOG_TAG = "ParseApplication";
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+				
 
 		// Add your initialization code here
 		Parse.initialize(this, "zqmvHbnxVWFrs5g1IxKSWjw0bTM8FZ8X4OexawX8", "ABasvvzqquIRp1cc01qu4eYK8o1uxua6qixLgiO3");
@@ -26,8 +35,9 @@ public class ParseApplication extends Application {
 		ParseACL.setDefaultACL(defaultACL, true);
 		
 		ParseObject testObject = new ParseObject("TestObject");
-		testObject.put("foo", "bar");
+		testObject.put("foo", "bar2");
 		testObject.saveInBackground();
+		
 	}
 
 }
