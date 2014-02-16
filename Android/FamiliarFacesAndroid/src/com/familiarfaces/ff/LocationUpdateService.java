@@ -135,6 +135,7 @@ public class LocationUpdateService extends Service {
 		killThread = true;
 		locationManager.removeUpdates(locationListener);
 		Log.d(LOG_TAG, "onDestory called for location service");
+		facebookUserIdRequested = false;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -161,9 +162,11 @@ public class LocationUpdateService extends Service {
 		                }
 		            });
 			try{
+				Log.d(LOG_TAG, "Executing facebook request");
 				request.executeAsync();
 			}catch(Exception e){
 				Log.d(LOG_TAG, "Task already running apparently");
+				Log.d(LOG_TAG, ""+ParseFacebookUtils.getSession().getState());
 			}
 			
 		}else{
@@ -179,6 +182,7 @@ public class LocationUpdateService extends Service {
 			} catch (ParseException e) {
 				Log.d(LOG_TAG, "Parse response: " + e.getMessage());
 			}
+			facebookUserIdRequested = false; // Reset
 		}
 		
 		
