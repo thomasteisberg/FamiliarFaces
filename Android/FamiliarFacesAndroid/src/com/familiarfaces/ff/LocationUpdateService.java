@@ -12,9 +12,13 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.model.GraphUser;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
 public class LocationUpdateService extends Service {
@@ -37,6 +41,8 @@ public class LocationUpdateService extends Service {
 	private boolean killThread = false;
 	
 	private LocationListener locationListener;
+	
+	private String facebookUserId = "";
 
 	@Override
 	public void onStart(final Intent intent, final int startId) {
@@ -132,22 +138,41 @@ public class LocationUpdateService extends Service {
 	
 	@SuppressWarnings("unchecked")
 	protected void sendLocationUpdate(){
-		if(ParseUser.getCurrentUser().getUsername() == null){
+		if(ParseUser.getCurrentUser() == null){
 			Log.d(LOG_TAG, "Not logged in. Can't upload data");
 			return;
 		}
+		
+		if(facebookUserId == ""){
+			Log.d(LOG_TAG, "Waiting to get facebook id");
+			Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
+		            new Request.GraphUserCallback() {
+		                @Override
+		                public void onCompleted(GraphUser user, Response response) {
+		                    if(user != null){
+		                    	facebookUserId = user.getId();
+		                    	Log.d(LOG_TAG, "Got facebook user id");
+		                    }else{
+		                    	Log.d(LOG_TAG, "Got NULL facebook user id");
+		                    }
+		                }
+		            });
+			request.executeAndWait();
+		}
+		
 		if(lastLocation == null) return;
-		Log.d(LOG_TAG, "Sending location "+ParseUser.getCurrentUser().getUsername()+":(" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
+		Log.d(LOG_TAG, "Sending location "+facebookUserId+":(" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("posLat", lastLocation.getLatitude());
 		params.put("posLong", lastLocation.getLongitude());
 		params.put("timestamp", System.currentTimeMillis());
-		params.put("userId", ParseUser.getCurrentUser().getUsername());
+		params.put("userId", facebookUserId);
 		try {
 			ParseCloud.callFunction("storeLocation", params);
 		} catch (ParseException e) {
 			Log.d(LOG_TAG, "Parse response: " + e.getMessage());
 		}
+		
 		
 	}
 	

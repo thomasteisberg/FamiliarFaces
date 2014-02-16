@@ -1,5 +1,8 @@
 package com.familiarfaces.ff;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -89,22 +92,6 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 		});*/
 		
 		
-		ParseFacebookUtils.logIn(this, new LogInCallback() {
-		  @Override
-		  public void done(ParseUser user, ParseException err) {
-		    if (user == null) {
-		      Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
-		    } else if (user.isNew()) {
-		      Log.d("MyApp", "User signed up and logged in through Facebook!");
-		      parseUser = user;
-		      Log.d(LOG_TAG, "parseUser.getUsername(): " + parseUser.getUsername());
-		    } else {
-		      Log.d("MyApp", "User logged in through Facebook!");
-		      parseUser = user;
-		      Log.d(LOG_TAG, "parseUser.getUsername(): " + parseUser.getUsername());
-		    }
-		  }
-		});
 
 	}
 	
@@ -112,7 +99,7 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.d(LOG_TAG, "onActivityResult");
 	  super.onActivityResult(requestCode, resultCode, data);
-	  //ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
+	  ParseFacebookUtils.finishAuthentication(requestCode, resultCode, data);
 	  uiHelper.onActivityResult(requestCode, resultCode, data);
 	  
 	  
@@ -124,6 +111,27 @@ public class ParseStarterProjectActivity extends FragmentActivity {
 	    super.onResume();
 	    isResumed = true;
 	    uiHelper.onResume();
+	    
+	    List<String> permissions = Arrays.asList("basic_info", "user_about_me", "user_friends");
+		ParseFacebookUtils.logIn(permissions, this, new LogInCallback() {
+		  @Override
+		  public void done(ParseUser user, ParseException err) {
+		    if (user == null) {
+		      Log.d(LOG_TAG, "Uh oh. The user cancelled the Facebook login.");
+		    } else if (user.isNew()) {
+		      Log.d(LOG_TAG, "User signed up and logged in through Facebook!");
+		      parseUser = user;
+		      Log.d(LOG_TAG, "parseUser.getUsername(): " + parseUser.getUsername());
+		      startService(locationServiceIntent); // Start location by default
+		    } else {
+		      Log.d(LOG_TAG, "User logged in through Facebook!");
+		      parseUser = user;
+		      Log.d(LOG_TAG, "parseUser.getUsername(): " + parseUser.getUsername());
+		      startService(locationServiceIntent); // Start location by default
+		    }
+		  }
+		});
+		Log.d(LOG_TAG, "Facebook login request sent");
 	}
 
 	@Override
