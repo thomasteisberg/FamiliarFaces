@@ -43,6 +43,7 @@ public class LocationUpdateService extends Service {
 	private LocationListener locationListener;
 	
 	private String facebookUserId = "";
+	private boolean facebookUserIdRequested = false;
 
 	@Override
 	public void onStart(final Intent intent, final int startId) {
@@ -144,6 +145,8 @@ public class LocationUpdateService extends Service {
 		}
 		
 		if(facebookUserId == ""){
+			if(facebookUserIdRequested) return; // Just waiting
+			facebookUserIdRequested = true;
 			Log.d(LOG_TAG, "Waiting to get facebook id");
 			Request request = Request.newMeRequest(ParseFacebookUtils.getSession(),
 		            new Request.GraphUserCallback() {
@@ -157,20 +160,25 @@ public class LocationUpdateService extends Service {
 		                    }
 		                }
 		            });
-			request.executeAndWait();
-		}
-		
-		if(lastLocation == null) return;
-		Log.d(LOG_TAG, "Sending location "+facebookUserId+":(" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("posLat", lastLocation.getLatitude());
-		params.put("posLong", lastLocation.getLongitude());
-		params.put("timestamp", System.currentTimeMillis());
-		params.put("userId", facebookUserId);
-		try {
-			ParseCloud.callFunction("storeLocation", params);
-		} catch (ParseException e) {
-			Log.d(LOG_TAG, "Parse response: " + e.getMessage());
+			try{
+				request.executeAsync();
+			}catch(Exception e){
+				Log.d(LOG_TAG, "Task already running apparently");
+			}
+			
+		}else{
+			if(lastLocation == null) return;
+			Log.d(LOG_TAG, "Sending location "+facebookUserId+":(" + lastLocation.getLatitude() + ", " + lastLocation.getLongitude() + ") from " + lastLocation.getProvider());
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("posLat", lastLocation.getLatitude());
+			params.put("posLong", lastLocation.getLongitude());
+			params.put("timestamp", System.currentTimeMillis());
+			params.put("userId", facebookUserId);
+			try {
+				ParseCloud.callFunction("storeLocation", params);
+			} catch (ParseException e) {
+				Log.d(LOG_TAG, "Parse response: " + e.getMessage());
+			}
 		}
 		
 		
