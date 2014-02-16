@@ -39,7 +39,10 @@ public class SelectionFragment extends Fragment {
 	Intent locationServiceIntent;
 	Intent inviteIntent;
 	
-	ArrayList<String> friends = null;
+	private ArrayList<String> friends = null;
+	private String userid = null;
+	
+	private Request friendreq;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState){
@@ -80,6 +83,7 @@ public class SelectionFragment extends Fragment {
 			
 			@Override
 			public void onClick(View arg0) {
+				inviteIntent.putExtra("facebookUserId", userid);
 				startActivity(inviteIntent);
 			}
 		});
@@ -93,8 +97,9 @@ public class SelectionFragment extends Fragment {
 		Log.d(LOG_TAG, "onResume()");
 		if(ParseUser.getCurrentUser() != null){
 			
+			
 			// Get the friends list
-			Request friendreq = Request.newMyFriendsRequest(ParseFacebookUtils.getSession(), new Request.GraphUserListCallback() {
+			friendreq = Request.newMyFriendsRequest(ParseFacebookUtils.getSession(), new Request.GraphUserListCallback() {
 				
 				@Override
 				public void onCompleted(List<GraphUser> users, Response response) {
@@ -131,7 +136,16 @@ public class SelectionFragment extends Fragment {
 					
 				}
 			});
-			friendreq.executeAsync();
+			
+			Request idreq = Request.newMeRequest(ParseFacebookUtils.getSession(), new Request.GraphUserCallback() {
+				
+				@Override
+				public void onCompleted(GraphUser user, Response response) {
+					userid = user.getId();
+					friendreq.executeAsync();
+				}
+			});
+			idreq.executeAsync();
 		} else Log.d(LOG_TAG, "User not logged in");
 	}
 }

@@ -26,7 +26,8 @@
             android:id="@+id/descriptionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Male, Age 19\nFrom Palo Alto, CA"
+            android:text=""
+            android:textSize="20dip"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_marginLeft="10dip" />
     </LinearLayout>
