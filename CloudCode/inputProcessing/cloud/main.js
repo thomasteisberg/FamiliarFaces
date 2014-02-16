@@ -1,4 +1,3 @@
-require('smshandler');
 
 var bucketSize = .00005;
 
@@ -91,7 +90,6 @@ Parse.Cloud.define("matchupFinder", function(request, response){
 
     query.find({
         success: function(results){
-            console.log("in dis query shit");
             for (var i = 0; i < results.length; i++){
                 var bucket = results[i];
                 var hits = bucket.get("crumbs");
@@ -99,12 +97,13 @@ Parse.Cloud.define("matchupFinder", function(request, response){
                 
                 for (var user in hits){
                     if (userId != user){
-                        var userPair = userId + "," + user;
-                        
+
                         var Connection = Parse.Object.extend("Connection");
                         var connection = new Connection;
 
-                        connection.set("userPair", userPair);
+                        connection.set("user", userId);
+                        connection.set("friend", user);
+
                         connection.set("location", results[i].get("bucketName"));
                         connection.set("timestamp", hits[user]); 
 
@@ -181,6 +180,74 @@ Parse.Cloud.job("findAllMatchups", function(request, status){
                
 });
 
+Parse.Cloud.define("findMatchesforUser", function(request, response){
+
+    var userId = request.params.userId;
+
+    var hitList;
+
+    var User = Parse.Object.extend("User");
+    var query = new Parse.Query(User);
+    query.equalTo("userId", userId);
+    query.find({
+        success: function(userMatch){
+            userHit = userMatch[0];
+            if(userHit.get(hitList)!==null){
+                hitList = userHit.get(hitList);
+            }
+            else{
+                hitList = {};
+            }
+
+            var Connection = Parse.Object.extend("Connection");
+            var query = new Parse.Query(Connection);
+            query.equalTo("user",userId);
+            query.find({
+                success: function(results){
+                    for(var i = 0; i < results.length; i++){
+                        var curHit = results[i];
+                        if(curHit.get(friend) in hitList){
+                            hitList[curHit.get(friend)] += 1;
+                        }
+                        else{
+                            hitList[friend] = 1;
+                        }
+                    }
+                    
+                },
+                error: function(error){
+                    response.error();
+                }
+            });
+
+
+            // set and save hitList
+
+            userHit.set("hitList", hitList);
+            userHit.save(null,{
+                success: function(userHit){
+                    console.log("saved.");
+                    userHit.save();
+                  
+                },
+                error: function(userHit, error){
+                    alert("failed");
+                    response.error();
+                }
+            });    
+
+
+
+        },
+        error: function(error){
+            response.error();
+        }
+    });
+
+
+
+
+});
 
 Parse.Cloud.define("findNumMatches", function(request, response){
     var username = request.params.username;
