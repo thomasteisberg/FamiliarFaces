@@ -6,8 +6,10 @@ var buckets = {};
 
 Parse.Cloud.define("storeLocation", function(request, response){
 
-   // var userId = request.user.id; // or could user Parse.User.current().id?
+   // var parseUserId = Parse.User.current().id;
+   // console.log(parseUserId);
     var userId = request.params.userId.toString();
+    
     var posLat = parseFloat(request.params.posLat);
     var posLong = parseFloat(request.params.posLong);
     var timestamp = request.params.timestamp.toString();
@@ -186,14 +188,23 @@ Parse.Cloud.define("findMatchesforUser", function(request, response){
 
     var hitList;
 
-    var User = Parse.Object.extend("User");
-    var query = new Parse.Query(User);
+    var fbUser = Parse.Object.extend("fbUser");
+    var query = new Parse.Query(fbUser);
     query.equalTo("userId", userId);
     query.find({
         success: function(userMatch){
-            userHit = userMatch[0];
-            if(userHit.get(hitList)!==null){
-                hitList = userHit.get(hitList);
+            
+            if(userMatch.length > 0){
+                userHit = userMatch[0];
+            }
+            else{
+                userHit = new fbUser;
+                userHit.set("userId",userId);
+            }
+            
+           
+            if(userHit.get("hitList")!==undefined){
+                hitList = userHit.get("hitList");
             }
             else{
                 hitList = {};
@@ -206,11 +217,11 @@ Parse.Cloud.define("findMatchesforUser", function(request, response){
                 success: function(results){
                     for(var i = 0; i < results.length; i++){
                         var curHit = results[i];
-                        if(curHit.get(friend) in hitList){
-                            hitList[curHit.get(friend)] += 1;
+                        if(curHit.get("friend") in hitList){
+                            hitList[curHit.get("friend")] += 1;
                         }
                         else{
-                            hitList[friend] = 1;
+                            hitList[curHit.get("friend")] = 1;
                         }
                     }
                     
@@ -234,7 +245,7 @@ Parse.Cloud.define("findMatchesforUser", function(request, response){
                     alert("failed");
                     response.error();
                 }
-            });    
+            }); 
 
 
 
@@ -244,12 +255,62 @@ Parse.Cloud.define("findMatchesforUser", function(request, response){
         }
     });
 
+});
 
+Parse.Cloud.define("addPhonePair", function(request, response){
 
+    var p1 = request.params.p1;
+    var p2 = request.params.p2;
+
+    Parse.Cloud.httpRequest({
+          method: "GET",
+          url: "http://testing.thomasteisberg.com/familiarfaces/addphonepair.php",
+          body: {
+             p1:p1,
+             p2:p2,
+          }
+    });
 
 });
 
+Parse.Cloud.define("sms", function(request, response){
+
+    var p1 = request.params.p1;
+    var msg = request.params.msg;
+
+    Parse.Cloud.httpRequest({
+        method: "GET",
+        url: "http://testing.thomasteisberg.com/familiarfaces/sms.php",
+        body: {
+            p1:p1,
+            msg:msg,
+        }
+
+    });
+});
+
 Parse.Cloud.define("findNumMatches", function(request, response){
-    var username = request.params.username;
-    response.success(Math.floor(Math.random() * 5)); // todo: Just temporary of couse
+    var userId = request.params.userId;
+    var threshold = request.params.threshold;
+    var counter = 0;
+    var fbUser = Parse.Object.Extend("fbUser");
+    var query = new Parse.Query(fbUser);
+    query.equalTo("userId", userId);
+    query.find({
+        success: function(results){
+            var curUser = results[0];
+            var hitList = curUser.get("hitList");
+            for(var friend in hitList){
+                if(hitList[friend] > threshold){
+                    counter++;
+                }
+            }
+        },
+        error: function(error){
+            response.error();
+        }
+        });
+
+    response.success(counter);
+  
 });
