@@ -1,3 +1,5 @@
+require('smshandler');
+
 var bucketSize = .00005;
 
 var buckets = {};
@@ -95,11 +97,8 @@ Parse.Cloud.define("matchupFinder", function(request, response){
                 var hits = bucket.get("crumbs");
                 console.log("hits " + hits);
                 
-                /** NEW CODE **/
                 for (var user in hits){
-                    console.log("TESTING USER " + user); 
                     if (userId != user){
-                        console.log("Should be connecting...");
                         var userPair = userId + "," + user;
                         
                         var Connection = Parse.Object.extend("Connection");
@@ -122,11 +121,10 @@ Parse.Cloud.define("matchupFinder", function(request, response){
                         });    
                     }
                     else{
-                       // response.success();
+                       // 
                     }
         
                 }
-                /** END NEW CODE **/
             }
         
         },
@@ -182,6 +180,7 @@ Parse.Cloud.job("findAllMatchups", function(request, status){
     });
                
 });
+
 
 Parse.Cloud.define("findNumMatches", function(request, response){
     var username = request.params.username;
