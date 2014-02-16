@@ -1,3 +1,5 @@
+require('cloud/smshandler.js')
+
 var bucketSize = .00005;
 
 var buckets = {};
